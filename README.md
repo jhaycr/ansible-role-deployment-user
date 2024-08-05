@@ -1,4 +1,4 @@
-Ansible Role: LUKS Disks
+Ansible Role: Deployment User
 =========
 
 An Ansible role that installs a deployment user, by default 'ansible', for further Ansible interactions to use rather than the existing user.
