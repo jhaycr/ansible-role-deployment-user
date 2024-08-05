@@ -1,0 +1,8 @@
+---
+- name: create deployment user
+  ansible.builtin.include_tasks: deployment-user-create.yml
+  when: "'present' in deployment_user_state"
+
+- name: destroy deployment user
+  ansible.builtin.include_tasks: deployment-user-destroy.yml
+  when: "'absent' in deployment_user_state"

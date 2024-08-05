@@ -1,0 +1,23 @@
+---
+
+- name: Remove sudo
+  become: yes
+  community.general.sudoers:
+    name: "{{ deployment_user_name }}"
+    user: "{{ deployment_user_name }}"
+    commands: "{{ deployment_user_sudo_commands }}"
+    state: "{{ deployment_user_state }}"
+    nopassword: "{{ deployment_user_sudo_passwordless }}"
+  when: "deployment_user_sudo is true"
+
+- name: Remove authorized ssh keys
+  ansible.posix.authorized_key:
+    user: "{{ deployment_user_name }}"
+    state: "{{ deployment_user_state }}"
+    key: "{{ item }}"
+  with_file: "{{ deployment_user_public_key_files }}"
+
+- name: Remove user
+  ansible.builtin.user:
+    name: "{{ deployment_user_name }}"
+    state: "{{ deployment_user_state }}"

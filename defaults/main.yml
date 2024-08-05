@@ -1,0 +1,16 @@
+---
+# defaults file for jhaycr.deployment-user
+
+deployment_user_name: ansible
+deployment_user_state: present
+# present | absent
+
+deployment_user_id: ""
+deployment_user_public_key_files: []
+# - ~/.ssh/id_rsa.pub
+
+deployment_user_public_key_create_locally_if_missing: true
+
+deployment_user_sudo: true
+deployment_user_sudo_commands: ALL
+deployment_user_sudo_passwordless: false

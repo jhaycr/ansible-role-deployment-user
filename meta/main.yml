@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Josh Haycraft
+  role_name: deployment_user
+  namespace: jhaycr
+  description: Creates deployment user for further Ansible tasks
+  license: MIT
+  min_ansible_version: '2.1'
+  platforms:
+  - name: Debian
+    versions:
+      - bookworm # 12
+dependencies: []

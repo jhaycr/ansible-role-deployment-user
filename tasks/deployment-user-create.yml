@@ -1,0 +1,34 @@
+---
+
+- name: Create ssh key if missing
+  local_action:
+    module: community.crypto.openssh_keypair
+    path: "{{ item | regex_replace('^(.*)\\.pub$', '\\1') }}"
+    force: false
+    regenerate: partial_idempotence
+  loop: "{{ deployment_user_public_key_files }}"
+  when: "deployment_user_public_key_create_locally_if_missing is true"
+
+- name: Add user
+  become: yes
+  ansible.builtin.user:
+    name: "{{ deployment_user_name }}"
+    state: "{{ deployment_user_state }}"
+
+- name: Add authorized ssh keys
+  ansible.posix.authorized_key:
+    user: "{{ deployment_user_name }}"
+    state: "{{ deployment_user_state }}"
+    key: "{{ item }}"
+  with_file: "{{ deployment_user_public_key_files }}"
+
+- name: Configure sudo
+  become: yes
+  become_user: root
+  community.general.sudoers:
+    name: "{{ deployment_user_name }}"
+    user: "{{ deployment_user_name }}"
+    commands: "{{ deployment_user_sudo_commands }}"
+    state: "{{ deployment_user_state }}"
+    nopassword: "{{ deployment_user_sudo_passwordless }}"
+  when: "deployment_user_sudo is true"
