@@ -24,11 +24,21 @@
 
 - name: Configure sudo
   become: yes
-  become_user: root
   community.general.sudoers:
     name: "{{ deployment_user_name }}"
     user: "{{ deployment_user_name }}"
     commands: "{{ deployment_user_sudo_commands }}"
     state: "{{ deployment_user_state }}"
     nopassword: "{{ deployment_user_sudo_passwordless }}"
+  when: "deployment_user_sudo is true"
+
+# https://stackoverflow.com/questions/77046453/ansible-become-user-results-in-incorrect-sudo-password-but-just-using-become-w
+- name: Extend sudo run-as
+  become: yes
+  community.general.sudoers:
+    name: "{{ deployment_user_name }}"
+    user: "{{ deployment_user_name }}"
+    runas: "{{ main_username }}"
+    commands: "{{ deployment_user_sudo_commands }}"
+    state: "{{ deployment_user_state }}"
   when: "deployment_user_sudo is true"
